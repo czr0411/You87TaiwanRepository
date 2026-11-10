@@ -1,5 +1,9 @@
 from PIL import Image,ImageDraw,ImageFont
 import math, subprocess
+from pathlib import Path
+
+OUTPUT_DIR = Path(__file__).resolve().parents[1] / "work"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 W,H=1280,720
 INK='#202a32'; BLUE='#237da0'; GREEN='#39876b'
 font='/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc'
@@ -55,15 +59,15 @@ def frame(t):
   if a<=t<b:d.text((640,631),s,font=f(29),fill=INK,anchor='mm')
  d.line([(90,685),(90+1100*t/14,685)],fill=BLUE,width=4)
  return im
-out='work/smartphone-whiteboard.mp4'
+out=str(OUTPUT_DIR / 'smartphone-whiteboard.mp4')
 p=subprocess.Popen(['ffmpeg','-y','-loglevel','error','-f','rawvideo','-vcodec','rawvideo','-pix_fmt','rgb24','-s','1280x720','-r','30','-i','-','-an','-c:v','libx264','-preset','fast','-crf','20','-pix_fmt','yuv420p','-movflags','+faststart',out],stdin=subprocess.PIPE)
 for i in range(420):p.stdin.write(frame(i/30).tobytes())
 p.stdin.close();assert p.wait()==0
 imgs=[frame(t).resize((640,360)) for t in [2.8,5.9,9.5,13.4]]
 contact=Image.new('RGB',(1280,720),'white')
 for i,im in enumerate(imgs):contact.paste(im,((i%2)*640,(i//2)*360))
-contact.save('work/preview.jpg')
-with open('work/smartphone.srt','w') as h:
+contact.save(OUTPUT_DIR / 'preview.jpg')
+with open(OUTPUT_DIR / 'smartphone.srt','w',encoding='utf-8') as h:
  for i,(a,b,s) in enumerate(subs,1):
   def tc(x):return f'00:00:{int(x):02},{round((x%1)*1000):03}'
   h.write(f'{i}\n{tc(a)} --> {tc(b)}\n{s}\n\n')
