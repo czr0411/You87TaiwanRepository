@@ -37,3 +37,21 @@ python src/render.py
 - `subtitles/`：SRT 字幕。
 - `previews/`：場景預覽圖片。
 - `requirements.txt`：Python 相依套件。
+
+## 範例二：SRT 字幕入門
+
+九段字幕的 58 秒白板動畫，介紹 SRT 格式、字幕時間碼、同步與易讀性。保留原始字幕時間，無配音。
+
+[下載／播放 MP4](videos/srt-intro-whiteboard.mp4) · [SRT 字幕](subtitles/srt-intro.srt) · [製作程式](src/render_srt_intro.py)
+
+![九個場景預覽](previews/srt-intro-preview.jpg)
+
+從儲存庫根目錄執行：
+
+```bash
+cd srt-whiteboard-animation
+python -m pip install -r requirements.txt
+python src/render_srt_intro.py
+```
+
+產生的影片、字幕與預覽圖會放在本專案的 `work/srt-intro/`。
